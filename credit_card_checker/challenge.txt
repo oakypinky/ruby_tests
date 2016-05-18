@@ -1,0 +1,10 @@
+Credit card checker:
+
+  A simple ruby program that I can run from the command line that will take a credit card number as input and determine if it is a valid cc number.  It should support Discover, Visa, Mastercard, and American Express.
+  As a jumpstart, please find all the needed rules here: http://en.wikipedia.org/wiki/Bank_card_number
+
+Примечания:
+  a) Использование сторонних гемов не допускается
+  b) Разрешается брать реализацию luhn алгоритма из сторонних источников
+  c) Предусмотреть максимально простое добавление новых типов карт
+  d) Не забывайте про тесты
