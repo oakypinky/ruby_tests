@@ -4,7 +4,6 @@
 # As checking for presence of each misspelled word inside whole dictionary
 #   proved to be quite time consuming operation, more verbose approach was
 #   taken to get around this issue.
-
 class DictionarySearch
   # Constant used to regulate the length of fragment that can be reversed.
   POSTFIX_LENGTH = 2
@@ -20,11 +19,11 @@ class DictionarySearch
 
     # Reads words from dictionary provided as a filepath.
     # It is assumed that each line contains only single word.
-    # Returns array with trimmed words or empty array if bad filename is provided.
+    # Returns array with trimmed words or empty array if bad filename is passed.
 
     def read_words(dictionary)
-      if !FileTest.file?(dictionary)
-        p "Provided #{dictionary} is not a filepath or such file does not exist."
+      unless FileTest.file?(dictionary)
+        p "Provided #{dictionary} is not a filepath or such file doesn't exist."
         return []
       end
 
@@ -43,14 +42,14 @@ class DictionarySearch
     #   such pair in different order already not in the list.
 
     def form_pairs(words)
-      split_words_in_similar_groups(words).each do |similar_words|
+      split_in_similar_groups(words).each do |similar_words|
         similar_words.each do |word|
-           misspelled_word = same_part(word) + misspelled_part(word)
-           if word != misspelled_word and
-              similar_words.include?(misspelled_word) and
-              !@word_pairs.include?([misspelled_word, word])
-             @word_pairs << [word, misspelled_word]
-           end
+          misspelled_word = same_part(word) + misspelled_part(word)
+          if word != misspelled_word &&
+             similar_words.include?(misspelled_word) &&
+             !@word_pairs.include?([misspelled_word, word])
+            @word_pairs << [word, misspelled_word]
+          end
         end
       end
     end
@@ -63,9 +62,9 @@ class DictionarySearch
     #   groups of words having the same first part. All such groups are
     #   concatenated into similar_groups that this method returns.
 
-    def split_words_in_similar_groups(words)
+    def split_in_similar_groups(words)
       words.select! { |word| word.size > POSTFIX_LENGTH }
-      words.sort! {|a, b| a.size <=> b.size}
+      words.sort! { |a, b| a.size <=> b.size }
 
       split_by_condition(words, lambda { |a, b| a.size == b.size }).flat_map do |same_word_length_group|
         split_by_condition(same_word_length_group.sort,

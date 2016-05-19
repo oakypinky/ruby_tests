@@ -1,16 +1,16 @@
 require './bank_data'
 
-# Class provides methods for validation of credit card numbers based on luhn algorithm
-#   and specific bank information like IIN ranges and code lengthes.
+# Class provides methods for validation of credit card numbers based on
+#   luhn algorithm and specific bank information like IIN ranges and
+#   code lengthes.
 # Specific bank data is stored in bank_data.rb.
-
 class CreditCardChecker
-
   # Method accepts string or int code numbers.
-  # String versions can contain '_' separators as code is converted to_i.to_s first.
+  # String versions can contain '_' separators as code is converted to_i.to_s.
   # It returns true if card number passed luhn check and if IIN and code length
   #   matches any registered bank in bank_data.rb.
-  # False is returned when card number fails validation or when invalid input is provided.
+  # False is returned when card number fails validation or when invalid input
+  #   is provided.
 
   def valid?(code)
     code = validate_input(code)
@@ -18,13 +18,13 @@ class CreditCardChecker
     valid_luhn?(code) && valid_bank?(code[0, 6], code.size)
   end
 
-  # Method to provide more concrete information about number like why check fails -
-  #   because of a luhn algorithm failure of because bank validation.
+  # Method to provide more concrete information about number like why check
+  #   fails - because of a luhn algorithm failure of because bank validation.
   # Also provides issuer name if bank check succeded.
 
   def verbose_validation(code)
     code = validate_input(code)
-    return {valid: false} if code.nil?
+    return { valid: false } if code.nil?
 
     bank = bank(code[0, 6], code.size)
     result = {
@@ -44,7 +44,7 @@ class CreditCardChecker
     def validate_input(code)
       if code.is_a?(Integer)
         code.to_s
-      elsif code.is_a?(String) && code.gsub('_', '').size == code.to_i.to_s.size
+      elsif code.is_a?(String) && code.delete('_').size == code.to_i.to_s.size
         code.to_i.to_s
       end
     end
@@ -59,7 +59,7 @@ class CreditCardChecker
     def luhn_checksum(code)
       digits = code.chars.map(&:to_i)
       digits.reverse.each_with_index.reduce(0) do |sum, (digit, index)|
-        sum +=
+        sum +
           case
           when index.even? then digit
           when digit < 5 then digit * 2
@@ -72,8 +72,9 @@ class CreditCardChecker
       !bank(iin, length).nil?
     end
 
-    # Method returns hash with bank information based on provided IIN and code length.
-    # If no bank is specified in bank_data.rb for provided parameters then nil is returned.
+    # Method returns hash with bank information based on provided IIN and code
+    #   length. If no bank is specified in bank_data.rb for provided parameters
+    #   then nil is returned.
 
     def bank(iin, length)
       CREDIT_CARDS.each do |info|
@@ -97,5 +98,4 @@ class CreditCardChecker
       end
       false
     end
-
 end
