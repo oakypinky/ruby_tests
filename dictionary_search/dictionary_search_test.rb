@@ -13,4 +13,3 @@ class DictionarySearchTest < Test::Unit::TestCase
     assert(matches.sort == pairs.flatten.sort) # word pairs can be in any order (doesn't have to be same as above)
   end
 end
-
